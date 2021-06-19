@@ -36,22 +36,14 @@ public class LendAdminController {
 
 
 	@RequestMapping("main")
-	public String Main(Model model) {
+	public String Main(Model model, Principal p) {
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/admin/lend/main";
 	}
 
 	@RequestMapping("booklist")
 	public String Book(Model model, String srchText, String order, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		if(srchText == null && order==null) {
 			model.addAttribute("lends", lendMapper.findAllByStateZero());//상태(승인대기)인 예약들만 불러오기
 			order = "학번";
@@ -68,19 +60,13 @@ public class LendAdminController {
 
 		model.addAttribute("srchText", srchText);
 		model.addAttribute("order", order);
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/admin/lend/booklist";
 	}
 
 	@RequestMapping("approve")
-	public String Approve(Model model, String lend_no, Principal principal) {
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
+	public String Approve(Model model, String lend_no) {
 		Integer lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);//lend 넘버에 해당하는 예약 불러오기
 		// 상태:예약승인(state=2)으로 업데이트
@@ -92,14 +78,7 @@ public class LendAdminController {
 	}
 
 	@RequestMapping("refuse")
-	public String Refuse(Model model, String lend_no, Principal principal) {
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
+	public String Refuse(Model model, String lend_no) {
 		Integer lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);//lend 넘버에 해당하는 예약 불러오기
 		// 상태:승인거절(state=1)으로 업데이트
@@ -111,15 +90,6 @@ public class LendAdminController {
 
 	@RequestMapping("rentlist")
 	public String Rentlist(Model model, String srchText, String order, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		if(srchText == null && order==null) {
 			model.addAttribute("lends", lendMapper.findAllByStateTwo());//상태(예약승인)인 예약들만 불러오기
 			order = "학번";
@@ -138,7 +108,7 @@ public class LendAdminController {
 
 		model.addAttribute("srchText", srchText);
 		model.addAttribute("order", order);
-
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/admin/lend/rentlist";
 	}
@@ -146,15 +116,6 @@ public class LendAdminController {
 	@PostMapping("rentsave")
 	public String RentSave(Model model, String detail_no, String lend_no,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") Date end_date, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		int lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);
 
@@ -192,15 +153,6 @@ public class LendAdminController {
 
 	@RequestMapping("returnlist")
 	public String Returnlist(Model model, String srchText, String order, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		if(srchText == null && order==null) {
 			model.addAttribute("lends", lendMapper.findAllByStateThree());//상태(대여중)인 예약들만 불러오기
 			order = "학번";
@@ -217,6 +169,7 @@ public class LendAdminController {
 
 		model.addAttribute("srchText", srchText);
 		model.addAttribute("order", order);
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/admin/lend/returnlist";
 	}
@@ -224,21 +177,11 @@ public class LendAdminController {
 	// 팝업창으로 반납일 선택하기
 	@PostMapping("return")
 	public String Return(Model model, String lend_no, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		int lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);
 
-		 Date returnday= new Date(System.currentTimeMillis());//반납일에 오늘 날짜 삽입
-		 Date endday=selectedLend.getEnd_date();//반납예정일 삽입
-
+		Date returnday= new Date(System.currentTimeMillis());//반납일에 오늘 날짜 삽입
+		Date endday=selectedLend.getEnd_date();//반납예정일 삽입
 
 		long calDateDays = (endday.getTime() - returnday.getTime())/(24*60*60*1000);//반납예정일에서 반납일(오늘) 빼기
 
@@ -246,18 +189,14 @@ public class LendAdminController {
 
 		long arrears =0;
 
-
 		if(returnday.compareTo(endday) >0) { //반납예정일보다 반납일(오늘)이 더 크면
 			calDateDays = calDateDays+1;
 			if(memberMapper.findMember(principal.getName()).getFirst_major_id() == 9 || //디지털컨텐츠 학과 생이면
-					memberMapper.findMember(principal.getName()).getSec_major_id() == 9)
-			{
+					memberMapper.findMember(principal.getName()).getSec_major_id() == 9){
 				arrears=calDateDays*500; // 연체료 하루에 500원
-			}
-			else {
+			}else {
 				arrears=calDateDays*1000;// 연체료 하루에 1000원
 			}
-
 		}
 
 		Date today = new Date(System.currentTimeMillis());
@@ -269,6 +208,7 @@ public class LendAdminController {
 		model.addAttribute("endday", endday);
 		model.addAttribute("lend_no", lend_no);
 		model.addAttribute("selectedLend", selectedLend);
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/admin/lend/return";
 	}
@@ -276,16 +216,6 @@ public class LendAdminController {
 	// 반납한 정보 저장완료 메세지 보여주기
 	@PostMapping("returnsave")
 	public String ReturnSave(Model model, String lend_no, String arrears, Principal principal) {
-
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		int lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);
 
@@ -297,7 +227,6 @@ public class LendAdminController {
 		device_log.setDetail_no(selectedLend.getDetail_no());
 
 		device_logMapper.InsertDevice_log(device_log);
-
 
 		Device_detail device_detail = device_detailMapper.findByDevice_code(selectedLend.getDevice_code(),
 				selectedLend.getDetail_no());
@@ -321,15 +250,6 @@ public class LendAdminController {
 	@PostMapping("extendsave")
 	public String ExtendSave(Model model, String lend_no, @DateTimeFormat(pattern = "yyyy-MM-dd") Date end_date,
 			String arrears, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		int lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);
 
@@ -345,20 +265,12 @@ public class LendAdminController {
 		lendMapper.UpdateLend(selectedLend);
 
 		model.addAttribute("selectedLend", selectedLend);
+
 		return "redirect:returnlist";
 	}
 
 	@RequestMapping("list")
 	public String List(Model model, String srchText, String order,Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
 		if(srchText == null && order==null) {
 			model.addAttribute("lends", lendMapper.findAll());//모든 예약 불러오기
 			order = "학번";
@@ -375,12 +287,13 @@ public class LendAdminController {
 
 		model.addAttribute("srchText", srchText);
 		model.addAttribute("order", order);
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
+
 		return "/admin/lend/list";
 	}
 
 	@RequestMapping("devicelog")
 	public String Devicelog(Model model, int detail_no, String device_code) {
-
 		List<Device_log> device_logs = device_logMapper.findbyDetail_no(detail_no, device_code);//장비코드명의 디테일 넘버에 해당하는 장비의 log 불러오기
 
 		model.addAttribute("device_logs", device_logs);
@@ -390,25 +303,21 @@ public class LendAdminController {
 
 	@RequestMapping("print")
 	public String print(Model model, String lend_no) {
-
 		int lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);
 
 		model.addAttribute("member", selectedLend);
-
 
 		return "admin/lend/print";
 	}
 
 	@RequestMapping("print_button")
 	public String print_button(Model model, String lend_no) {
-
 		int lend_No = Integer.parseInt(lend_no);
 		Lend selectedLend = lendMapper.findByNo(lend_No);
 
 		model.addAttribute("member", selectedLend);
 		model.addAttribute("lend_no", lend_no);
-
 
 		return "admin/lend/print_button";
 	}

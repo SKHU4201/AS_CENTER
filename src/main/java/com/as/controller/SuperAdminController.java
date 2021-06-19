@@ -1,5 +1,7 @@
 package com.as.controller;
 
+import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 import com.as.dto.Member;
@@ -21,7 +23,7 @@ public class SuperAdminController {
     MemberMapper memberMapper;
 
     @GetMapping("/organization")
-    public String organization(Model model, String select, String search){
+    public String organization(Model model, String select, String search, Principal p){ // p.toString().lastIndexOf("name=") + "\n" + p.toString().substring(208, 212)
         List<Member> m = memberMapper.findAllMember();
 
         if(search == null){ // 조건 없을 시
@@ -37,6 +39,7 @@ public class SuperAdminController {
             }
         }
 
+        model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
         model.addAttribute("students", m);
         model.addAttribute("select", select);
         model.addAttribute("search", search);
@@ -46,7 +49,6 @@ public class SuperAdminController {
 
     @PostMapping("/organization")
     public String changeRole(@RequestParam String snum, @RequestParam int role){
-
         memberMapper.updateRoleAtSnum(snum, role);
         
         return "redirect:organization";

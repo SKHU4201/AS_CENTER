@@ -41,7 +41,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">

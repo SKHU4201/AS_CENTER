@@ -13,10 +13,9 @@
 		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 
-<body style="margin-bottom: 4%;">
+<body>
 	<div id="navBar">
 		<a href="/index" id="homeImg"><img src="/media/mark_SKHU.png" alt="MAIN" width="100%" height="100%"></a>
 		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/notice/notice_list_front" >공지사항</a></sec:authorize>
@@ -31,7 +30,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -47,8 +46,7 @@
 		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/notice/notice_list_front" class="headerBtn">공지사항</a></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"><a href="/admin/notice/notice_list" class="headerBtn">공지사항</a></sec:authorize>
 	</div>
-	<div class="container">
-
+	<div class="container" style="height: 100vh;">
 		<form method="post">
 			<div>
 				<div>
@@ -82,35 +80,13 @@
 						$(document)
 							.ready(
 								function () {
-									$('#body')
-										.on(
-											'keyup',
-											function () {
-												$(
-														'#string_limit')
-													.html(
-														"(" +
-														$(
-															this)
-														.val().length +
-														" / 1000)");
-
-												if ($(this)
-													.val().length > 1000) {
-													$(this)
-														.val(
-															$(
-																this)
-															.val()
-															.substring(
-																0,
-																1000));
-													$(
-															'#string_limit')
-														.html(
-															"(1000 / 1000)");
-												}
-											});
+									$('#body').on('keyup', function () {
+										$('#string_limit').html("(" + $(this).val().length + " / 1000)");
+										if ($(this).val().length > 1000) {
+											$(this).val($(this).val().substring(0, 1000));
+											$('#string_limit').html("(1000 / 1000)");
+										}
+									});
 								});
 					</script>
 				</tbody>

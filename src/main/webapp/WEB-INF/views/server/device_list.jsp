@@ -52,6 +52,9 @@
         .modal-body td:nth-child(1) {
             background-color: #bbb;
         }
+        .modal-body td:nth-child(2) {
+            width: 400px;
+        }
         .modal-footer {
             position: absolute;
             bottom: 0;
@@ -88,7 +91,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -179,16 +182,16 @@
                                         <td>소속 전공</td>
                                         <td>
                                             <select name="major_id" required>
-                                            <option value="1">IT융합자율학부</option>
-                                            <option value="2">미디어콘텐츠융합자율학부<option>
-                                            <option value="3">인문융합자율학부</option>
-                                            <option value="4">사회융합자율학부</option>
-                                            <option value="5">컴퓨터공학전공</option>
-                                            <option value="6">소프트웨어공학전공</option>
-                                            <option value="7">정보통신공학전공</option>
-                                            <option value="8">글로컬IT전공</option>
-                                            <option value="9">디지털콘텐츠전공</option>
-                                            <option value="10">신문방송학전공</option>
+                                                <option value="1">IT융합자율학부</option>
+                                                <option value="2">미디어콘텐츠융합자율학부</option>
+                                                <option value="3">인문융합자율학부</option>
+                                                <option value="4">사회융합자율학부</option>
+                                                <option value="5">컴퓨터공학전공</option>
+                                                <option value="6">소프트웨어공학전공</option>
+                                                <option value="7">정보통신공학전공</option>
+                                                <option value="8">글로컬IT전공</option>
+                                                <option value="9">디지털콘텐츠전공</option>
+                                                <option value="10">신문방송학전공</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -199,6 +202,8 @@
                                         </td>
                                     </tr>
                                 </table>
+                                <input type="hidden" name="select" value="${ select }">
+                                <input type="hidden" name="search" value="${ search }">
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">추가</button>

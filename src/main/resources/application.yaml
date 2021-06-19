@@ -16,8 +16,8 @@ server:
 ---
 spring:
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: smtp.daum.net
+    port: 465
     protocol: smtp
     default-encoding: UTF-8
     username:  # SMTP용 google 계정
@@ -26,6 +26,8 @@ spring:
       mail:
         smtp:
           starttls:
+            enable: true
+          ssl:
             enable: true
           auth: true
           connectiontimeout: 5000

@@ -9,7 +9,7 @@
 	<link rel="icon" href="/media/mark_SKHU.png">
 	<link rel="stylesheet" href="/css/notice_list.css">
 	<link rel="stylesheet" href="/css/main.css">
-	<script src="js/main.js"></script>
+	<script src="/js/main.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
@@ -28,7 +28,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -78,23 +78,13 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<button class="button write" style="background-color:#2E64FE;" onclick="location.href='notice_write'">글쓰기</button>
 
 	<script>
 		function notice_delete() {
 			alert("삭제 기능 실행");
 		}
 	</script>
-
-	<button class="button write" style="background-color:#2E64FE;" onclick="location.href='notice_write'">글쓰기</button>
-	<div class="footer">
-		<p>
-			<br>전화번호: 02-2610-4201
-			<br>주소: 서울특별시 구로구 오류2동 연동로 320 (성공회대학교), 월당관 1층
-			<br>근무시간: 9:00 AM ~ 5:00 PM
-			<br>점심시간: 12:00 PM ~ 1:00 PM<br>
-			<br>&copy; 2021 skhu4201.com
-		</p>
-	</div>
 </body>
 
 </html>

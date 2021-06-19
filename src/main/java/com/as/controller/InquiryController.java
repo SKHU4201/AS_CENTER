@@ -7,10 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.as.dto.Inquiry;
-import com.as.dto.Member;
 import com.as.dto.Sequence;
 import com.as.mapper.InquiryMapper;
-import com.as.mapper.MemberMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +27,8 @@ public class InquiryController {
 
 	/*문의사항 글쓰기 컨트롤러*/
     @GetMapping("user/inquiry/inquiry")
-    public String inquiry_front(Model model) {
+    public String inquiry_front(Model model, Principal p) {
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "user/inquiry/inquiry";
     }
@@ -53,20 +52,18 @@ public class InquiryController {
 
     /*문의사항 모아보기 컨트롤러(admin)*/
     @GetMapping("admin/inquiry/inquiry_list")
-    public String inquiry_list_admin(Model model) {
-
+    public String inquiry_list_admin(Model model, Principal p) {
     	List<Inquiry> list = inquiryMapper.findAll();
     	Collections.sort(list);
 
     	model.addAttribute("inquiry_list", list);
-
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "admin/inquiry/inquiry_list";
     }
 
     @PostMapping("admin/inquiry/inquiry_list")
-    public String inquiry_list_admin(Model model, int select_value) {
-
+    public String inquiry_list_admin(Model model, int select_value, Principal p) {
     	if(select_value == 2) {
     		List<Inquiry> list = inquiryMapper.findAll();
         	Collections.sort(list);
@@ -82,26 +79,25 @@ public class InquiryController {
         	model.addAttribute("select_value", select_value);
     	}
 
-
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "admin/inquiry/inquiry_list";
     }
 
     /*문의사항 모아보기 컨트롤러(front)*/
     @GetMapping("user/inquiry/inquiry_list_front")
-    public String inquiry_list_front(Model model){
-
+    public String inquiry_list_front(Model model, Principal p){
     	List<Inquiry> list = inquiryMapper.findAll();
     	Collections.sort(list);
 
     	model.addAttribute("inquiry_list", list);
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "user/inquiry/inquiry_list_front";
     }
 
     @PostMapping("user/inquiry/inquiry_list_front")
-    public String inquiry_list_front(Model model, int select_value) {
-
+    public String inquiry_list_front(Model model, int select_value, Principal p) {
     	if(select_value == 2) {
     		List<Inquiry> list = inquiryMapper.findAll();
         	Collections.sort(list);
@@ -117,17 +113,18 @@ public class InquiryController {
         	model.addAttribute("select_value", select_value);
     	}
 
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
+
         return "user/inquiry/inquiry_list_front";
     }
 
     /*문의사항 디테일 컨트롤러(admin)*/
     @GetMapping("admin/inquiry/inquiry_details_admin")
-    public String inquiry_details_admin(Model model, int no, String nextTitle, String preTitle, HttpSession session) {
+    public String inquiry_details_admin(Model model, int no, String nextTitle, String preTitle, HttpSession session, Principal p) {
     	int LX = inquiryMapper.findLX();
 
     	Inquiry inquiry = inquiryMapper.findByNo(no);
     	Sequence list = inquiryMapper.find_ud_inquiry(no);
-
 
     	if(no == 1) {
         	Inquiry next = inquiryMapper.findByNo(list.getNextNo());
@@ -179,8 +176,7 @@ public class InquiryController {
 
     	model.addAttribute("LX", LX);
     	model.addAttribute("inquiry_list", inquiry);
-
-
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
     	session.setAttribute("no", no);
 
@@ -189,7 +185,6 @@ public class InquiryController {
 
     @PostMapping("admin/inquiry/inquiry_details_admin")
     public String inquiry_details_admin(Model model, String answer, HttpSession session) {
-
     	int no = (int) session.getAttribute("no");
 
     	Inquiry inquiry = inquiryMapper.findByNo(no);
@@ -213,7 +208,7 @@ public class InquiryController {
 
     /*문의사항 디테일 컨트롤러(front)*/
     @GetMapping("user/inquiry/inquiry_details_front")
-    public String inquiry_details_front(Model model, int no, String nextTitle, String preTitle) {
+    public String inquiry_details_front(Model model, int no, String nextTitle, String preTitle, Principal p) {
        	int LX = inquiryMapper.findLX();
 
     	Inquiry inquiry = inquiryMapper.findByNo(no);
@@ -272,15 +267,16 @@ public class InquiryController {
 
     	model.addAttribute("LX", LX);
     	model.addAttribute("inquiry_list", inquiry);
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
     	inquiryMapper.updateInquiry_views(inquiry);
-
 
         return "user/inquiry/inquiry_details_front";
     }
 
     @PostMapping("user/inquiry/inquiry_details_front")
-    public String inquiry_details_front(Model model, String title) {
+    public String inquiry_details_front(Model model, String title, Principal p) {
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "user/inquiry/inquiry_details_front";
     }

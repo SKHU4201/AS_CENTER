@@ -28,7 +28,8 @@ public class NoticeController {
 
 	/*공지사항 글쓰기 컨트롤러*/
     @GetMapping("admin/notice/notice_write")
-    public String notice_front(Model model) {
+    public String notice_front(Model model, Principal p) {
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "admin/notice/notice_write";
     }
@@ -49,16 +50,16 @@ public class NoticeController {
 
     /*공지사항 글쓰기 수정 컨트롤러*/
     @GetMapping("admin/notice/notice_edit")
-    public String notice_edit(Model model, int no, HttpSession session) {
-
+    public String notice_edit(Model model, int no, HttpSession session, Principal p) {
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
     	session.setAttribute("no", no);
     	model.addAttribute("notice_list", noticeMapper.findByNo(no));
+
         return "admin/notice/notice_edit";
     }
 
     @PostMapping("admin/notice/notice_edit")
     public String notice_edit(Model model, Principal principal, String title, String body, HttpSession session) {
-
     	int no = (int) session.getAttribute("no");
 
     	Notice notice = noticeMapper.findByNo(no);
@@ -79,13 +80,11 @@ public class NoticeController {
     @RequestMapping
     (value = "admin/notice/notice_delete", method = RequestMethod.GET)
     public String getDelete(@RequestParam("no") int no) throws Exception {
+		Notice notice = noticeMapper.findByNo(no);
 
-    Notice notice = noticeMapper.findByNo(no);
+    	noticeMapper.deleteNotice(notice);
 
-    noticeMapper.deleteNotice(notice);
-
-
-     return "redirect:notice_list";
+	    return "redirect:notice_list";
     }
 
 
@@ -93,12 +92,12 @@ public class NoticeController {
 
     /*공지사항 리스트 컨트롤러*/
     @GetMapping("admin/notice/notice_list")
-    public String notice_list(Model model, String title, String a) {
-
+    public String notice_list(Model model, String title, String a, Principal p) {
     	List<Notice> list = noticeMapper.findAll();
     	Collections.sort(list);
 
     	model.addAttribute("notice_list", list);
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "admin/notice/notice_list";
     }
@@ -119,12 +118,12 @@ public class NoticeController {
 
     /*공지사항 리스트 회원 컨트롤러*/
     @GetMapping("user/notice/notice_list_front")
-    public String notice_list_front(Model model, HttpSession session) {
-
+    public String notice_list_front(Model model, HttpSession session, Principal p) {
     	List<Notice> list = noticeMapper.findAll();
     	Collections.sort(list);
-    	model.addAttribute("notice_list", list);
 
+    	model.addAttribute("notice_list", list);
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
     	session.setAttribute("list_length", list.size());
 
 
@@ -133,8 +132,7 @@ public class NoticeController {
     }
 
     @PostMapping("user/notice/notice_list_front")
-    public String notice_list_front2(Model model, String title) {
-
+    public String notice_list_front2(Model model, String title, Principal p) {
     	if (title == null) title = "";
 
     	List<Notice> list = noticeMapper.findByTitle("%" +title + "%");
@@ -142,21 +140,18 @@ public class NoticeController {
 
     	model.addAttribute("notice_list", list);
     	model.addAttribute("title", title);
-
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "user/notice/notice_list_front";
     }
 
     /*공지사항 디테일 회원 컨트롤러*/
     @GetMapping("user/notice/notice_details")
-    public String notice_details(Model model, int no, String nextTitle, String preTitle) {
-
+    public String notice_details(Model model, int no, String nextTitle, String preTitle, Principal p) {
     	int LX = noticeMapper.findLX();
 
     	Notice notice = noticeMapper.findByNo(no);
     	Sequence list = noticeMapper.find_ud_notice(no);
-
-
 
     	notice.setViews(notice.getViews()+1);
 
@@ -210,6 +205,7 @@ public class NoticeController {
 
     	model.addAttribute("LX", LX);
     	model.addAttribute("notice_list", notice);
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
     	noticeMapper.updateNotice_views(notice);
 
@@ -217,7 +213,8 @@ public class NoticeController {
     }
 
     @PostMapping("user/notice/notice_details")
-    public String notice_details2(Model model) {
+    public String notice_details2(Model model, Principal p) {
+		model.addAttribute("name", p.toString().split(",")[2].split("=")[1]); // 회원 이름
 
         return "user/notice/notice_details";
     }

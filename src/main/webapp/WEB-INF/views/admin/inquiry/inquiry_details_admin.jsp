@@ -28,7 +28,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -137,15 +137,6 @@
 		</div>
 		<button type="submit">저장</button>
 	</form>
-	<div class="footer">
-		<p>
-			<br>전화번호: 02-2610-4201
-			<br>주소: 서울특별시 구로구 오류2동 연동로 320 (성공회대학교), 월당관 1층
-			<br>근무시간: 9:00 AM ~ 5:00 PM
-			<br>점심시간: 12:00 PM ~ 1:00 PM<br>
-			<br>&copy; 2021 skhu4201.com
-		</p>
-	</div>
 </body>
 
 </html>

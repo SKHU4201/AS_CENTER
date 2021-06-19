@@ -71,6 +71,10 @@
             height: 100%;
             border: none;
         }
+        .table tbody:hover {
+            cursor: pointer;
+            background-color: #dee2e6;
+        }
     </style>
     <script>
         $(document).ready(function () {
@@ -108,7 +112,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -168,18 +172,20 @@
                 </thead>
                 <tbody>
                     <c:forEach var="s" items="${ students }">
-                        <tr data-bs-toggle="modal" data-bs-target="#exampleModal" 
-                        data-snum="${ s.snum }" data-name="${ s.name }" data-role="${ s.role_id }">
-                            <td>${ s.snum }</td>
-                            <td>${ s.name }</td>
-                            <td>${ s.email }</td>
-                            <td>${ s.phone }</td>
-                            <td>{{ major_list[${ s.first_major_id }] }}</td>
-                            <td>{{ major_list[${ s.sec_major_id }] }}</td>
-                            <td><fmt:formatDate pattern="yyyy-MM-dd" value="${ s.signup_date }" /></td>
-                            <td>{{ role_name_list[${ s.role_id }] }}</td>
-                            <td>${ s.access == 1 ? "인증O" : "인증X" }</td>
-                        </tr>
+                        <c:if test="${ s.role_id <= 90 }">
+                            <tr data-bs-toggle="modal" data-bs-target="#exampleModal"  
+                            data-snum="${ s.snum }" data-name="${ s.name }" data-role="${ s.role_id }">
+                                <td>${ s.snum }</td>
+                                <td>${ s.name }</td>
+                                <td>${ s.email }</td>
+                                <td>${ s.phone }</td>
+                                <td>{{ major_list[${ s.first_major_id }] }}</td>
+                                <td>{{ major_list[${ s.sec_major_id }] }}</td>
+                                <td><fmt:formatDate pattern="yyyy-MM-dd" value="${ s.signup_date }" /></td>
+                                <td>{{ role_name_list[${ s.role_id }] }}</td>
+                                <td>${ s.access == 1 ? "인증O" : "인증X" }</td>
+                            </tr>
+                        </c:if>
                     </c:forEach>
                 </tbody>
             </table>

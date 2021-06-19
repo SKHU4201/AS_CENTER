@@ -9,20 +9,19 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.as.dto.Device;
 import com.as.dto.Lend;
-import com.as.dto.Member;
 import com.as.mapper.DeviceMapper;
 import com.as.mapper.Device_detailMapper;
 import com.as.mapper.Device_logMapper;
 import com.as.mapper.LendMapper;
 import com.as.mapper.MajorMapper;
 import com.as.mapper.MemberMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/user/lend")
@@ -44,16 +43,7 @@ public class LendFrontController {
 	//컴공 노트북 대여
 	@RequestMapping("select_com_laptop")
 	public String Select_com_laptop(Model model, Principal principal) {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
-
-		GregorianCalendar gc = new GregorianCalendar ();
+		GregorianCalendar gc = new GregorianCalendar();
 
 		// 내일 날짜 가져와서 변수에 넣기
 		gc.add(Calendar.DATE, 1);
@@ -71,122 +61,19 @@ public class LendFrontController {
 		String korDayOfWeeks[] = new String[5];
 
 		for (int i = 0; i < 5; i++) {
-
 			years[i] = year;
 			months[i] = month;
-			if (months[i] <= 12) {// 12월달이 넘어갈때
+			if (months[i] <= 12) { // 12월달이 넘어갈때
 				dates[i] = date + i;
-				if (dates[i] <= max) {// 달의 마지막날을 넘어갈때
+				if (dates[i] <= max) { // 달의 마지막날을 넘어갈때
 
 					dayOfWeeks[i] = dayOfWeek + i;
 
 					korDayOfWeeks[i] = "";
 					switch (dayOfWeeks[i] % 7) {
-					case 1:
-						date = date + 1;
-						dayOfWeek = dayOfWeek + 1;// 주말일경우에는 안나오게
-						i--;
-						break;
-					case 2:
-						korDayOfWeeks[i] = "월";
-						break;
-					case 3:
-						korDayOfWeeks[i] = "화";
-						break;
-					case 4:
-						korDayOfWeeks[i] = "수";
-						break;
-					case 5:
-						korDayOfWeeks[i] = "목";
-						break;
-					case 6:
-						korDayOfWeeks[i] = "금";
-						break;
-					case 0:
-						date = date + 1;
-						dayOfWeek = dayOfWeek + 1;// 주말일경우에는 안나오게
-						i--;
-						break;
-
-					}
-
-				} else {
-					date = date - max;// 1일부터 다시 시작
-					month++;// 다음달
-					i--;
-				}
-			} else {
-				year++;// 다음년도
-				month = 1;// 1월부터 다시시작
-				i--;
-			}
-		}
-
-		// Date객체로 변환하기 위한 String 객체 배열
-		String calendar[] = new String[5];
-		for (int i = 0; i < 5; i++) {
-			calendar[i] = years[i].toString() + "-" + months[i].toString() + "-" + dates[i].toString();
-		}
-
-		// Select에 보여주기 위한 String 객체 배열
-		String selectDate[] = new String[5];
-		for (int i = 0; i < 5; i++) {
-			selectDate[i] = years[i] + "년" + months[i] + "월" + dates[i] + "일" + korDayOfWeeks[i] + "요일";
-		}
-
-		model.addAttribute("korDayOfWeeks", korDayOfWeeks);
-		model.addAttribute("calendar", calendar);
-		model.addAttribute("selectDate", selectDate);
-
-
-
-		return "/user/lend/select_com_laptop";
-	}
-
-	//컴공 노트북 대여
-		@RequestMapping("select_com_tablet")
-		public String Select_com_tablet(Model model, Principal principal) {
-
-			Member student = memberMapper.findMember(principal.getName());
-
-			if(student == null){
-				return "redirect: /logout_processing";
-			}else{
-				model.addAttribute("student", student);
-			}
-
-			GregorianCalendar gc = new GregorianCalendar ();
-
-			// 내일 날짜 가져와서 변수에 넣기
-			gc.add(Calendar.DATE, 1);
-
-			int year = gc.get(Calendar.YEAR);
-			int month = gc.get(Calendar.MONTH) + 1;
-			int date = gc.get(Calendar.DATE);
-			int dayOfWeek = gc.get(Calendar.DAY_OF_WEEK);
-			int max = gc.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-			Integer years[] = new Integer[5];
-			Integer months[] = new Integer[5];
-			Integer dates[] = new Integer[5];
-			Integer dayOfWeeks[] = new Integer[5];
-			String korDayOfWeeks[] = new String[5];
-
-			for (int i = 0; i < 5; i++) {
-
-				years[i] = year;
-				months[i] = month;
-				if (months[i] <= 12) {// 12월달이 넘어갈때
-					dates[i] = date + i;
-					if (dates[i] <= max) {// 달의 마지막날을 넘어갈때
-
-						dayOfWeeks[i] = dayOfWeek + i;
-
-						korDayOfWeeks[i] = "";
-						switch (dayOfWeeks[i] % 7) {
 						case 1:
 							date = date + 1;
-							dayOfWeek = dayOfWeek + 1;// 주말일경우에는 안나오게
+							dayOfWeek = dayOfWeek + 1; // 주말일경우에는 안나오게
 							i--;
 							break;
 						case 2:
@@ -206,59 +93,139 @@ public class LendFrontController {
 							break;
 						case 0:
 							date = date + 1;
-							dayOfWeek = dayOfWeek + 1;// 주말일경우에는 안나오게
+							dayOfWeek = dayOfWeek + 1; // 주말일경우에는 안나오게
 							i--;
 							break;
 
-						}
-
-					} else {
-						date = date - max;// 1일부터 다시 시작
-						month++;// 다음달
-						i--;
 					}
+
 				} else {
-					year++;// 다음년도
-					month = 1;// 1월부터 다시시작
+					date = date - max; // 1일부터 다시 시작
+					month++; // 다음달
 					i--;
 				}
+			} else {
+				year++; // 다음년도
+				month = 1; // 1월부터 다시시작
+				i--;
 			}
-
-			// Date객체로 변환하기 위한 String 객체 배열
-			String calendar[] = new String[5];
-			for (int i = 0; i < 5; i++) {
-				calendar[i] = years[i].toString() + "-" + months[i].toString() + "-" + dates[i].toString();
-			}
-
-			// Select에 보여주기 위한 String 객체 배열
-			String selectDate[] = new String[5];
-			for (int i = 0; i < 5; i++) {
-				selectDate[i] = years[i] + "년" + months[i] + "월" + dates[i] + "일" + korDayOfWeeks[i] + "요일";
-			}
-
-			model.addAttribute("korDayOfWeeks", korDayOfWeeks);
-			model.addAttribute("calendar", calendar);
-			model.addAttribute("selectDate", selectDate);
-
-
-
-			return "/user/lend/select_com_tablet";
 		}
+
+		// Date객체로 변환하기 위한 String 객체 배열
+		String calendar[] = new String[5];
+		for (int i = 0; i < 5; i++) {
+			calendar[i] = years[i].toString() + "-" + months[i].toString() + "-" + dates[i].toString();
+		}
+
+		// Select에 보여주기 위한 String 객체 배열
+		String selectDate[] = new String[5];
+		for (int i = 0; i < 5; i++) {
+			selectDate[i] = years[i] + "년" + months[i] + "월" + dates[i] + "일" + korDayOfWeeks[i] + "요일";
+		}
+
+		model.addAttribute("korDayOfWeeks", korDayOfWeeks);
+		model.addAttribute("calendar", calendar);
+		model.addAttribute("selectDate", selectDate);
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
+
+		return "/user/lend/select_com_laptop";
+	}
+
+	//컴공 노트북 대여
+	@RequestMapping("select_com_tablet")
+	public String Select_com_tablet(Model model, Principal principal) {
+		GregorianCalendar gc = new GregorianCalendar();
+
+		// 내일 날짜 가져와서 변수에 넣기
+		gc.add(Calendar.DATE, 1);
+
+		int year = gc.get(Calendar.YEAR);
+		int month = gc.get(Calendar.MONTH) + 1;
+		int date = gc.get(Calendar.DATE);
+		int dayOfWeek = gc.get(Calendar.DAY_OF_WEEK);
+		int max = gc.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+		Integer years[] = new Integer[5];
+		Integer months[] = new Integer[5];
+		Integer dates[] = new Integer[5];
+		Integer dayOfWeeks[] = new Integer[5];
+		String korDayOfWeeks[] = new String[5];
+
+		for (int i = 0; i < 5; i++) {
+			years[i] = year;
+			months[i] = month;
+			if (months[i] <= 12) { // 12월달이 넘어갈때
+				dates[i] = date + i;
+				if (dates[i] <= max) { // 달의 마지막날을 넘어갈때
+					dayOfWeeks[i] = dayOfWeek + i;
+
+					korDayOfWeeks[i] = "";
+					switch (dayOfWeeks[i] % 7) {
+						case 1:
+							date = date + 1;
+							dayOfWeek = dayOfWeek + 1; // 주말일경우에는 안나오게
+							i--;
+							break;
+						case 2:
+							korDayOfWeeks[i] = "월";
+							break;
+						case 3:
+							korDayOfWeeks[i] = "화";
+							break;
+						case 4:
+							korDayOfWeeks[i] = "수";
+							break;
+						case 5:
+							korDayOfWeeks[i] = "목";
+							break;
+						case 6:
+							korDayOfWeeks[i] = "금";
+							break;
+						case 0:
+							date = date + 1;
+							dayOfWeek = dayOfWeek + 1; // 주말일경우에는 안나오게
+							i--;
+							break;
+					}
+				} else {
+					date = date - max; // 1일부터 다시 시작
+					month++; // 다음달
+					i--;
+				}
+			} else {
+				year++; // 다음년도
+				month = 1; // 1월부터 다시시작
+				i--;
+			}
+		}
+
+		// Date객체로 변환하기 위한 String 객체 배열
+		String calendar[] = new String[5];
+		for (int i = 0; i < 5; i++) {
+			calendar[i] = years[i].toString() + "-" + months[i].toString() + "-" + dates[i].toString();
+		}
+
+		// Select에 보여주기 위한 String 객체 배열
+		String selectDate[] = new String[5];
+		for (int i = 0; i < 5; i++) {
+			selectDate[i] = years[i] + "년" + months[i] + "월" + dates[i] + "일" + korDayOfWeeks[i] + "요일";
+		}
+
+		model.addAttribute("korDayOfWeeks", korDayOfWeeks);
+		model.addAttribute("calendar", calendar);
+		model.addAttribute("selectDate", selectDate);
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
+
+		return "/user/lend/select_com_tablet";
+	}
 
 	//사용자별 예약리스트 보기
 	@RequestMapping("userlist")
-	public String Userlist(Model model, String device_code, String visit_date,String lend_type, Principal principal)
-			throws ParseException {
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
+	public String Userlist(Model model, String device_code, String visit_date, String lend_type, Principal principal)
+	throws ParseException {
 		// lend 객체 생성
 		Lend device_lend = new Lend();
-		device_lend.setSnum(principal.getName());//로그인 아이디(학번) 저장
+		device_lend.setSnum(principal.getName()); //로그인 아이디(학번) 저장
 
 		//예약 날짜 visit_Date 삽입
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -274,7 +241,7 @@ public class LendFrontController {
 		device_lend.setState(0);
 
 		// 선택된 장비의 타입 삽입
-		int lendtype=Integer.parseInt(lend_type);
+		int lendtype = Integer.parseInt(lend_type);
 		device_lend.setType(lendtype);
 
 		//Lend 객체 삽입
@@ -285,30 +252,22 @@ public class LendFrontController {
 		model.addAttribute("selecteddevice", selecteddevice);
 
 		//로그인 아이디에 해당하는 예약리스트 가져오기
-		List<Lend> lends = lendMapper.findBySnum(principal.getName());
+		List < Lend > lends = lendMapper.findBySnum(principal.getName());
 
 		model.addAttribute("lends", lends);
-
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/user/lend/userlist";
 	}
 
 	@RequestMapping("userpage")
 	public String Userlist(Model model, Principal principal)
-			throws ParseException {
-
-		Member student = memberMapper.findMember(principal.getName());
-
-		if(student == null){
-			return "redirect: /logout_processing";
-		}else{
-			model.addAttribute("student", student);
-		}
+	throws ParseException {
 		//로그인 아이디에 해당하는 예약리스트 가져오기
-		List<Lend> lends = lendMapper.findBySnum(principal.getName());
+		List < Lend > lends = lendMapper.findBySnum(principal.getName());
 
 		model.addAttribute("lends", lends);
-
+		model.addAttribute("name", principal.toString().split(",")[2].split("=")[1]); // 회원 이름
 
 		return "/user/lend/userpage";
 	}

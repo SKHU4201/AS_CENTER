@@ -27,7 +27,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -44,10 +44,8 @@
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"><a href="/admin/notice/notice_list" class="headerBtn">공지사항</a></sec:authorize>
 	</div>
 	<div id="app">
-		<p
-			style="font-size: 36px; margin-top: 10%; margin-left: 45%; display: inline; color: #585858;">문의사항</p>
-		<p
-			style="font-size: 20px; color: #A0A0A0; margin-left: 44%; margin-top: 5px;">skhu/AS_Center</p>
+		<p style="font-size: 36px; margin-top: 10%; margin-left: 45%; display: inline; color: #585858;">문의사항</p>
+		<p style="font-size: 20px; color: #A0A0A0; margin-left: 44%; margin-top: 5px;">skhu/AS_Center</p>
 		<form method="post">
 			<select class="select_sort" name="select_value">
 				<option value="2"><c:if test="${select_value == 2}">selected</c:if>></option>
@@ -59,7 +57,6 @@
 			</button>
 		</form>
 	</div>
-
 
 	<table class="inquiry">
 		<tr>
@@ -92,15 +89,6 @@
         	var url = $(this).attr("data-url");
         	location.href = url; 
         	}) 
-        </script>
-	<div class="footer">
-		<p>
-			<br>전화번호: 02-2610-4201
-			<br>주소: 서울특별시 구로구 오류2동 연동로 320 (성공회대학교), 월당관 1층
-			<br>근무시간: 9:00 AM ~ 5:00 PM
-			<br>점심시간: 12:00 PM ~ 1:00 PM<br>
-			<br>&copy; 2021 skhu4201.com
-		</p>
-	</div>
+    </script>
 </body>
 </html>

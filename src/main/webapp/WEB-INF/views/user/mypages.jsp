@@ -46,7 +46,7 @@
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
 		<a href="/user/mypages" style="float: right;">마이페이지</a>
-		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+		<a style="float: right; pointer-events: none;">${ name }님</a>
 	</div>
 	<div class="header">
 		<div class="headerBtn" style="float: left; width: 350px;">
@@ -111,18 +111,17 @@
 				<hr>
 				<div style="width: 500px;">
 					<p><b>학번</p>
-					<input type="text" value="${ student.snum }" readonly>
+					<input type="text" value="${ snum }" readonly>
 					<p><b>이름</p>
-					<input type="text" value="${ student.name }" readonly>
+					<input type="text" value="${ name }" readonly>
 					<p><b>이메일</p>
-					<input type="text" value="${ student.email }" readonly>
+					<input type="text" value="${ email }" readonly>
 					<p><b>제1전공>></b></p>
 					<input type="text" value="${ first }" readonly>
 					<p><b>제2전공>></b></p>
 					<input type="text" value="${ sec }" readonly>
 					<p><b>가입 날짜>></p>
-					<fmt:formatDate pattern="yyyy-MM-dd" value="${ student.signup_date }" />
-
+					<input type="text" value="${ signup_date }" readonly>
 				</div>
 			</div>
 			<div id="tab-2" class="tab-content">
@@ -132,7 +131,7 @@
 					<form action="/user/mail/send_change_email">
 						<input type="text" name="changeEMail" placeholder="구글, 네이버, 다음으로만 변경 가능합니다.">
 						<p><b>아래 메일로 확인 메일이 발송됩니다.</b></p>
-						<p><b>${ student.email }</b></p>
+						<p><b>${ email }</b></p>
 						<button type="submit">이메일 변경하기</button>
 					</form>
 				</div>
@@ -142,15 +141,6 @@
 				<hr>
 				<div style="margin: 300px auto; width: 500px;">
 					<button type="button">대여 기록 보러가기</button>
-				</div>
-			</div>
-			<div id="tab-4" class="tab-content">
-				<h1>이메일 인증</h1>
-				<hr>
-				<div style="margin: 300px auto; width: 500px; text-align: center;">
-					<p><b>이메일 주소 확인</b></p>
-					<input type="text" value="${ student.email }" readonly>
-					<input type="button" value="이메일 인증하기" onClick="location.href='/user/mail/send'">
 				</div>
 			</div>
 		</div>
