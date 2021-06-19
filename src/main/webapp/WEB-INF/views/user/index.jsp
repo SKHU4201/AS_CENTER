@@ -1,11 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/security/tags"
-	prefix="sec"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,19 +13,17 @@
 	<link rel="stylesheet" href="/css/main.css">
 	<script src="/js/main.js"></script>
 </head>
-
 <body onload="showBanner()">
 	<div id="navBar">
 		<a href="/index" id="homeImg"><img src="/media/mark_SKHU.png" alt="MAIN" width="100%" height="100%"></a>
-		<c:if test="${ student.getRole_id() == 1 || student.getRole_id() == 2  }" ><a href="http://localhost:8088/user/notice/notice_list_front" >공지사항</a></c:if>
-		<c:if test="${ student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" > <a href="http://localhost:8088/admin/notice/notice_list" >공지사항</a></c:if>
-		<c:if test="${ student.getRole_id() == 1  }" > <a>장비 예약</a></c:if>
-		<c:if test="${ student.getRole_id() == 2  }" > <a href="http://localhost:8088/user/lend/select_com_laptop" >장비 예약</a></c:if>
-		<c:if test="${ student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" > <a href="http://localhost:8088/admin/lend/booklist" >장비 관리</a></c:if>
-		<c:if test="${ student.getRole_id() == 2  }" > <a href="http://localhost:8088/user/lend/userpage" >예약 목록</a></c:if>
-		<c:if test="${ student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" > <a href="http://localhost:8088/admin/lend/list" >장비 목록</a></c:if>
-		<c:if test="${ student.getRole_id() == 1 || student.getRole_id() == 2  }" > <a href="http://localhost:8088/user/inquiry/inquiry_list_front" >문의하기</a>
-		<c:if test="${ student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" > <a href="http://localhost:8088/admin/inquiry/inquiry_list" >문의하기</a></c:if>
+		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/notice/notice_list_front" >공지사항</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/notice/notice_list" >공지사항</a></sec:authorize>
+		<sec:authorize access="hasRole('ROLE_USER')"> <a onclick="alert('본인인증을을 하셔야 장비 예약이 가능합니다.')">장비 예약</a></sec:authorize>
+		<sec:authorize access="hasRole('ROLE_MEMBER')"> <a href="/user/lend/select_com_laptop" >장비 예약</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/lend/booklist" >예약 처리</a></sec:authorize>
+		<a href="/user/lend/userpage">예약 기록 보기</a>
+		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"> <a href="/user/inquiry/inquiry_list_front" >문의하기</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/inquiry/inquiry_list" >문의 처리</a></sec:authorize>
 		<sec:authorize access="authenticated">
 			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
 		</sec:authorize>
@@ -36,20 +31,19 @@
 		<a style="float: right; pointer-events: none;">${ student.name }님</a>
 	</div>
 	<div style="width: 100%; height: 100vh;">
-		<div class="header" style="overflow: inherit;">
+		<div class="header" style="box-shadow: none;">
 			<div class="headerBtn" style="float: left; width: 350px;">
-				<img src="/media/logo_mark_mr_sin.jpg" alt="logo_AS" width="100%" height="100%">
+				<a href="/index"><img src="/media/logo_mark_mr_sin.jpg" alt="logo_AS" width="100%" height="100%"></a>
 			</div>
 			<a class="headerBtn" href="/logout_processing">로그아웃</a>
 			<a class="headerBtn" href="/user/mypages">마이페이지</a>
-			<c:if test="${ student.getRole_id() == 1  }" ><a class="headerBtn" href="">문의하기</a></c:if>
-			<c:if test="${ student.getRole_id() == 2  }" ><a href="http://localhost:8088/user/inquiry/inquiry_list_front" class="headerBtn">문의하기</a></c:if>
-			<c:if test="${ student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" ><a href="http://localhost:8088/admin/inquiry/inquiry_list" class="headerBtn">문의하기</a></c:if>
-			<c:if test="${  student.getRole_id() == 2  || student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" ><a href="http://localhost:8088/user/lend/select_com_laptop" class="headerBtn">예약하기</a></c:if>
-			<c:if test="${ student.getRole_id() == 1  }" ><a class="headerBtn" href="">공지사항</a></c:if>
-			<c:if test="${ student.getRole_id() == 2  }" ><a href="http://localhost:8088/user/notice/notice_list_front" class="headerBtn">공지사항</a></c:if>
-			<c:if test="${ student.getRole_id() == 99 || student.getRole_id() == 98 || student.getRole_id() == 97 }" ><a href="http://localhost:8088/admin/notice/notice_list" class="headerBtn">공지사항</a></c:if>
-			
+			<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/inquiry/inquiry_list_front" class="headerBtn">문의하기</a></sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"><a href="/admin/inquiry/inquiry_list" class="headerBtn">문의 처리</a></sec:authorize>
+			<sec:authorize access="hasRole('ROLE_USER')"> <a onclick="alert('본인인증을을 하셔야 장비 예약이 가능합니다.')" class="headerBtn">장비 예약</a></sec:authorize>
+			<sec:authorize access="hasRole('ROLE_MEMBER')"> <a href="/user/lend/select_com_laptop" class="headerBtn">장비 예약</a></sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/lend/booklist" class="headerBtn">예약 처리</a></sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/notice/notice_list_front" class="headerBtn">공지사항</a></sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"><a href="/admin/notice/notice_list" class="headerBtn">공지사항</a></sec:authorize>
 		</div>
 		<img id='banner' src="/media/background_img/0.jpg" alt="background" width="100%" height="777px">
 	</div>
@@ -85,5 +79,4 @@
 		})
 	</script>
 </body>
-
 </html>

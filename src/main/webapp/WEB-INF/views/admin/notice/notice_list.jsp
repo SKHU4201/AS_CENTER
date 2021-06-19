@@ -1,57 +1,100 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>성공회대학교 A/S실</title>
-		<link rel="icon" href="/media/mark_SKHU.png">
-        <link rel="stylesheet" href="/css/notice_list.css">
-        <link rel="stylesheet" href="/css/main.css">
-        <script src="js/main.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    </head>
-    <body style="margin-bottom: 7%;">
-	<div class="header" style="box-shadow: 0px 1px 20px gray;">
-		<div class="headerBtn" style="float: left; width: 350px;" onclick="location.href='/index'">
-			<img src="/media/logo_mark_mr_sin.jpg" alt="logo_AS" width="100%" height="100%">
+
+<head>
+	<title>성공회대학교 A/S실</title>
+	<link rel="icon" href="/media/mark_SKHU.png">
+	<link rel="stylesheet" href="/css/notice_list.css">
+	<link rel="stylesheet" href="/css/main.css">
+	<script src="js/main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body style="margin-bottom: 7%;">
+	<div id="navBar">
+		<a href="/index" id="homeImg"><img src="/media/mark_SKHU.png" alt="MAIN" width="100%" height="100%"></a>
+		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/notice/notice_list_front" >공지사항</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/notice/notice_list" >공지사항</a></sec:authorize>
+		<sec:authorize access="hasRole('ROLE_USER')"> <a onclick="alert('본인인증을을 하셔야 장비 예약이 가능합니다.')">장비 예약</a></sec:authorize>
+		<sec:authorize access="hasRole('ROLE_MEMBER')"> <a href="/user/lend/select_com_laptop" >장비 예약</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/lend/booklist" >예약 처리</a></sec:authorize>
+		<a href="/user/lend/userpage">예약 기록 보기</a>
+		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"> <a href="/user/inquiry/inquiry_list_front" >문의하기</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/inquiry/inquiry_list" >문의 처리</a></sec:authorize>
+		<sec:authorize access="authenticated">
+			<a class="btn" style="float: right;" href="/logout_processing">로그아웃</a>
+		</sec:authorize>
+		<a href="/user/mypages" style="float: right;">마이페이지</a>
+		<a style="float: right; pointer-events: none;">${ student.name }님</a>
+	</div>
+	<div class="header">
+		<div class="headerBtn" style="float: left; width: 350px;">
+			<a href="/index"><img src="/media/logo_mark_mr_sin.jpg" alt="logo_AS" width="100%" height="100%"></a>
 		</div>
 		<a class="headerBtn" href="/logout_processing">로그아웃</a>
 		<a class="headerBtn" href="/user/mypages">마이페이지</a>
-		<a class="headerBtn" href="/admin/inquiry/inquiry_list">문의하기</a>
-		<a class="headerBtn" href="">예약하기</a>
-		<a class="headerBtn" href="/admin/notice/notice_list">공지사항</a>
+		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/inquiry/inquiry_list_front" class="headerBtn">문의하기</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"><a href="/admin/inquiry/inquiry_list" class="headerBtn">문의 처리</a></sec:authorize>
+		<sec:authorize access="hasRole('ROLE_USER')"> <a onclick="alert('본인인증을을 하셔야 장비 예약이 가능합니다.')" class="headerBtn">장비 예약</a></sec:authorize>
+		<sec:authorize access="hasRole('ROLE_MEMBER')"> <a href="/user/lend/select_com_laptop" class="headerBtn">장비 예약</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"> <a href="/admin/lend/booklist" class="headerBtn">예약 처리</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_MEMBER, ROLE_EMPLOYEE, ROLE_PROFESSOR')"><a href="/user/notice/notice_list_front" class="headerBtn">공지사항</a></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_SERVER')"><a href="/admin/notice/notice_list" class="headerBtn">공지사항</a></sec:authorize>
 	</div>
-	
-
 	<div style="display: inline-block; width:100%; margin-top: 5%;">
-    	<p style="font-size: 36px; margin-top: 10%; margin-left: 45%; display: inline; color:#585858;">공지사항</p>
-    	<p style="font-size: 20px; color: #A0A0A0; margin-left: 44%; margin-top: 5px;">skhu/AS_Center</p>
-    	<form method="post">
-    	<div style="position: relative">
-    	<input type="text" name="title" value="${title}" class="search" placeholder="제목으로 검색">
-    	<button type="submit" class="search_button"><img src="/media/search_black_24dp.svg"></button>
-    	</div>
-    	</form>
-    </div>
+		<p style="font-size: 36px; margin-top: 10%; margin-left: 45%; display: inline; color:#585858;">공지사항</p>
+		<p style="font-size: 20px; color: #A0A0A0; margin-left: 44%; margin-top: 5px;">skhu/AS_Center</p>
+		<form method="post">
+			<div style="position: relative">
+				<input type="text" name="title" value="${title}" class="search" placeholder="제목으로 검색">
+				<button type="submit" class="search_button"><img src="/media/search_black_24dp.svg"></button>
+			</div>
+		</form>
+	</div>
 
-        <table class="notice">
-            <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일</th><th>조회수</th><th>수정/삭제</th></tr>
-            <c:forEach var="notice_list" items="${ notice_list }">
-            <tr><td>${ notice_list.getNo() }</td><td>${ notice_list.getTitle() }</td><td>${ notice_list.getSnum() }</td><td>${ notice_list.getWrite_date() }</td><td>${ notice_list.getViews() }</td>
-            <td><button class="edit" onclick="location.href='notice_edit?no=${notice_list.getNo()}'"><img src="/media/edit.svg"></button>
-            <button class="delete" onclick="location.href='notice_delete?no=${notice_list.getNo()}'"><img src="/media/trash.svg"></button></td></tr>
-            </c:forEach>
-        </table>
-		
-		 <script>
-        	function notice_delete() {
-        		alert("삭제 기능 실행");
-        	}
-        </script>
+	<table class="notice">
+		<tr>
+			<th>번호</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>작성일</th>
+			<th>조회수</th>
+			<th>수정/삭제</th>
+		</tr>
+		<c:forEach var="notice_list" items="${ notice_list }">
+			<tr>
+				<td>${ notice_list.getNo() }</td>
+				<td>${ notice_list.getTitle() }</td>
+				<td>${ notice_list.getSnum() }</td>
+				<td>${ notice_list.getWrite_date() }</td>
+				<td>${ notice_list.getViews() }</td>
+				<td><button class="edit" onclick="location.href='notice_edit?no=${notice_list.getNo()}'"><img
+							src="/media/edit.svg"></button>
+					<button class="delete" onclick="location.href='notice_delete?no=${notice_list.getNo()}'"><img
+							src="/media/trash.svg"></button></td>
+			</tr>
+		</c:forEach>
+	</table>
 
-        <button class="button write" style="background-color:#2E64FE;" onclick = "location.href='notice_write'">글쓰기</button>
-		
+	<script>
+		function notice_delete() {
+			alert("삭제 기능 실행");
+		}
+	</script>
 
+	<button class="button write" style="background-color:#2E64FE;" onclick="location.href='notice_write'">글쓰기</button>
+	<div class="footer">
+		<p>
+			<br>전화번호: 02-2610-4201
+			<br>주소: 서울특별시 구로구 오류2동 연동로 320 (성공회대학교), 월당관 1층
+			<br>근무시간: 9:00 AM ~ 5:00 PM
+			<br>점심시간: 12:00 PM ~ 1:00 PM<br>
+			<br>&copy; 2021 skhu4201.com
+		</p>
+	</div>
+</body>
 
-    </body>
 </html>

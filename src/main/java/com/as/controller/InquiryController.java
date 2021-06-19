@@ -6,15 +6,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.as.dto.Inquiry;
+import com.as.dto.Member;
+import com.as.dto.Sequence;
+import com.as.mapper.InquiryMapper;
+import com.as.mapper.MemberMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import com.as.dto.Inquiry;
-import com.as.dto.Sequence;
-import com.as.mapper.InquiryMapper;
 
 
 
@@ -22,7 +24,8 @@ import com.as.mapper.InquiryMapper;
 @Controller
 public class InquiryController {
 
-	@Autowired InquiryMapper inquiryMapper;
+	@Autowired 
+	InquiryMapper inquiryMapper;
 
 	/*문의사항 글쓰기 컨트롤러*/
     @GetMapping("user/inquiry/inquiry")
@@ -86,7 +89,7 @@ public class InquiryController {
 
     /*문의사항 모아보기 컨트롤러(front)*/
     @GetMapping("user/inquiry/inquiry_list_front")
-    public String inquiry_list_front(Model model) {
+    public String inquiry_list_front(Model model){
 
     	List<Inquiry> list = inquiryMapper.findAll();
     	Collections.sort(list);

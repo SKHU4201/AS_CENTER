@@ -43,7 +43,6 @@ public class FrontController {
 
 	@RequestMapping("/user/mypages")
 	public String mypages(Model model, Principal principal) {
-		List<Major> majorList = memberMapper.findAllMajor();
 		Member student = memberMapper.findMember(principal.getName());
 
 		model.addAttribute("student", student);
