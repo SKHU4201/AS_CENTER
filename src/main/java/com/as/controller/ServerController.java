@@ -69,7 +69,7 @@ public class ServerController {
     }
 
     @PostMapping("/deviceList")
-    public String deviceAdd(Model model, String code, String name, int type, 
+    public String deviceAdd(String code, String name, int type, 
     @DateTimeFormat(pattern = "yyyy-MM-dd") Date buy_date, int major_id, int no) {
         Device d = new Device(code, name, type, buy_date, major_id);
         deviceMapper.insertDevice(d);
@@ -81,4 +81,10 @@ public class ServerController {
         return "redirect:deviceList";
     }
     
+    @PostMapping("/deviceChangeState")
+    public String changeState(String code, String name, int detail, int state){
+        ddMapper.updateDeviceState(code, detail, state);
+
+        return "redirect:deviceList";
+    }
 }

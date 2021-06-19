@@ -86,14 +86,6 @@
                 $(".modal-body #role").val($(event.relatedTarget).data('role'));
             });
         });
-
-        function addArr(sss){
-            var addArr = []
-            
-            console.log(typeof sss)
-            console.log(sss.length)
-            console.log(sss)
-        }
     </script>
 </head>
 

@@ -33,4 +33,8 @@ public interface Device_detailMapper {
 	// 장비 디테일 번호 추가
 	@Insert("INSERT INTO device_detail VALUES (#{dd.code}, #{dd.detail_no}, #{dd.state})")
 	void insertDeviceDetail(@Param("dd") Device_detail dd);
+
+	// 장비 상태 변경
+	@Update("UPDATE device_detail SET state=#{state} WHERE code=#{code} and detail_no=#{detail}")
+	void updateDeviceState(String code, int detail, int state);
 }

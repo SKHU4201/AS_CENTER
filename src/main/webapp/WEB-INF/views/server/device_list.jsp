@@ -74,6 +74,17 @@
             border: none;
         }
     </style>
+    <script>
+        $(document).ready(function () {
+
+            $('#exampleModal2').on('show.bs.modal', function (event) {
+                $(".modal-body #code").val($(event.relatedTarget).data('code'));
+                $(".modal-body #name").val($(event.relatedTarget).data('name'));
+                $(".modal-body #detail").val($(event.relatedTarget).data('detail'));
+                $(".modal-body #stats").val($(event.relatedTarget).data('stats'));
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -202,8 +213,6 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <input type="hidden" name="select" value="${ select }">
-                                <input type="hidden" name="search" value="${ search }">
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">추가</button>
@@ -228,38 +237,64 @@
                 </thead>
                 <tbody>
                     <c:forEach var="device" items="${ devices }">
-                        <tr data-url>
-                            <td>${ device.code }</td>
-                            <td>${ device.name }</td>
-                            <td>{{ device_type[${ device.type }] }}</td>
-                            <td><fmt:formatDate pattern="yyyy-MM-dd" value="${ device.buy_date }" /></td>
-                            <td>{{ major_list[${ device.major_id }] }}</td>
-                            <td>${ device.detail_no }</td>
-                            <td>{{ detail_state[${ device.state}] }}</td>
-                        </tr>
+                        <c:if test="${ device.detail_no != 0 }">
+                            <tr data-url data-bs-toggle="modal" data-bs-target="#exampleModal2" 
+                            data-code="${ device.code }" data-name="${ device.name }" data-detail="${ device.detail_no }" data-stats="${ device.state }">
+                                <td>${ device.code }</td>
+                                <td>${ device.name }</td>
+                                <td>{{ device_type[${ device.type }] }}</td>
+                                <td><fmt:formatDate pattern="yyyy-MM-dd" value="${ device.buy_date }" /></td>
+                                <td>{{ major_list[${ device.major_id }] }}</td>
+                                <td>${ device.detail_no }</td>
+                                <td>{{ detail_state[${ device.state}] }}</td>
+                            </tr>
+                        </c:if>
                     </c:forEach>
                 </tbody>
             </table>
+            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <form method="post" action="/server/deviceChangeState">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel2">장비 추가</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <table>
+                                    <tr>
+                                        <td>코드명</td>
+                                        <td><input type="text" name="code" id="code" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>모델명</td>
+                                        <td><input type="text" name="name" id="name" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>상세 번호</td>
+                                        <td><input type="text" name="detail" id="detail" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>상태 번호</td>
+                                        <td>
+                                            <select name="state" id="state">
+                                                <option value="0">대여중</option>
+                                                <option value="1">대여 가능</option>
+                                                <option value="2">예약중</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">추가</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
-        </script>
-        <script>
-            var app = new Vue({
-                el: "#app",
-                data: {
-                    major_list: [
-                        "학생", "IT융합자율학부", "미디어콘텐츠융합자율학부", "인문융합자율학부", "사회융합자율학부", "컴퓨터공학전공",
-                        "소프트웨어공학전공", "정보통신공학전공", "글로컬IT전공", "디지털콘텐츠전공", "신문방송학전공"
-                    ],
-                    device_type: [
-                        "NONE", "노트북", "태블릿", "카메라", "삼각대", "빔 프로젝터"
-                    ],
-                    detail_state: [
-                        "대여중", "대여 가능", "예약중"
-                    ]
-                }
-            })
-        </script>
     </div>
     <div class="footer">
 		<p>
@@ -270,6 +305,26 @@
 			<br>&copy; 2021 skhu4201.com
 		</p>
 	</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
+    </script>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                major_list: [
+                    "학생", "IT융합자율학부", "미디어콘텐츠융합자율학부", "인문융합자율학부", "사회융합자율학부", "컴퓨터공학전공",
+                    "소프트웨어공학전공", "정보통신공학전공", "글로컬IT전공", "디지털콘텐츠전공", "신문방송학전공"
+                ],
+                device_type: [
+                    "NONE", "노트북", "태블릿", "카메라", "삼각대", "빔 프로젝터"
+                ],
+                detail_state: [
+                    "대여중", "대여 가능", "예약중"
+                ]
+            }
+        })
+    </script>
 </body>
 
 </html>
