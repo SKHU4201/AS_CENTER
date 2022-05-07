@@ -1,5 +1,4 @@
 # Web Site
-[바로가기](http://skhu4201.com)
 
 # :busts_in_silhouette: Member
 - 김기범
